@@ -1,0 +1,39 @@
+name: python ci pipeline
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            -main
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: "3.11"
+
+            - name: Install Dependencies
+              run: |
+                pip install -r requirements.txt
+
+            - name: Run Formatting Check
+              run: |
+                black . --check
+
+            - name: Run Linter
+              run: |
+                flake8 .
+
+            - name: Run Tests
+              run: |
+                pytest
+
